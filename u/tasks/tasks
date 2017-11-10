@@ -1,0 +1,42 @@
+#!/usr/bin/env ruby
+
+require "rubygems"
+require "bundler/setup"
+require "./app/models/task.rb"
+
+Bundler.require(:default)
+
+if ARGV.empty?
+	puts "Napishi suda commandy plis"
+	exit
+end
+
+unless ARGV.size >= 3
+	puts "Izvini davai paka"
+end
+
+
+command = ARGV[0]
+date = ARGV[1]
+text = ARGV[2..-1].join(" ")
+
+puts command
+puts date
+puts text
+
+#unless File.exist?("./db/tasks.sqlite")
+#	db = SQLite3::Database.new "./db/tasks.sqlite"
+#	
+#	rows = db.execute <<-SQL
+#		CREATE TABLE tasks(
+#			id INTEGER PRIMARY KEY AUTOINCREMENT,
+#			date TEXT,
+#			text TEXT
+#		)
+#	SQL
+#end
+
+case command
+when "add"
+	task = Task.new({date: date, text: text}).save	
+end

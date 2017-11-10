@@ -1,0 +1,35 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'bundler/setup'
+Bundler.require(:default)
+
+require "./app/models/base_model.rb"
+
+Dir[File.dirname(__FILE__) + '/app/**/*.rb'].each do |source_file|
+  require source_file
+end
+
+DatabaseInitializer.new.check_database
+
+puts "Welcome to Task Manager!"
+
+arguments = ArgumentsParser.new.parse
+
+case arguments[:command]
+when "add"
+  if Task.new(arguments).save
+    puts "Task successfully added!"
+  end
+when "list"
+  TaskView.new(Task.all).print
+when "remove"
+  task = Task.find ARGV[1]
+  task.destroy
+ when "today"
+  TaskView.new(Task.show).print
+ when "done"
+  task = Task.find ARGV[1]
+  task.done
+  puts "Task successfully done!" 
+end
